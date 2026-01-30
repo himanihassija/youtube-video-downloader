@@ -1,0 +1,58 @@
+from pytube import YouTube
+import tkinter as tk
+from tkinter import filedialog
+import sys
+
+def progress_callback(stream, chunk, bytes_remaining):
+    total_size = stream.filesize
+    downloaded = total_size - bytes_remaining
+    percent = (downloaded / total_size) * 100
+    print(f"Downloading... {percent:.2f}%")
+
+def download_video(url, save_path):
+    try:
+        yt = YouTube(url, on_progress_callback=progress_callback)
+
+        print("\n📹 Video Details")
+        print("----------------")
+        print("Title :", yt.title)
+        print("Length:", yt.length, "seconds")
+        print("Views :", yt.views)
+
+        streams = yt.streams.filter(progressive=True, file_extension="mp4")
+
+        print("\n🎞 Available Resolutions:")
+        for i, stream in enumerate(streams):
+            print(f"{i}. {stream.resolution}")
+
+        choice = int(input("\nChoose resolution number: "))
+        selected_stream = streams[choice]
+
+        print("\n📥 Download started...")
+        selected_stream.download(output_path=save_path)
+        print("\n✅ Video downloaded successfully!")
+
+    except Exception:
+        print("\n❌ Something went wrong.")
+        print("Please check the YouTube URL, your internet connection, or try again.")
+
+def choose_folder():
+    folder = filedialog.askdirectory()
+    return folder
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.withdraw()
+
+    video_url = input("Enter YouTube video URL: ").strip()
+
+    if "youtube.com" not in video_url and "youtu.be" not in video_url:
+        print("❌ Invalid YouTube URL.")
+        sys.exit()
+
+    save_dir = choose_folder()
+
+    if save_dir:
+        download_video(video_url, save_dir)
+    else:
+        print("❌ No folder selected.")
