@@ -30,10 +30,10 @@ def download_video(url, save_path):
 
         print("\n📥 Download started...")
         selected_stream.download(output_path=save_path)
-        print("\n✅ Video downloaded successfully!")
+        print("\n Video downloaded successfully!")
 
     except Exception:
-        print("\n❌ Something went wrong.")
+        print("\n Something went wrong.")
         print("Please check the YouTube URL, your internet connection, or try again.")
 
 def choose_folder():
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     video_url = input("Enter YouTube video URL: ").strip()
 
     if "youtube.com" not in video_url and "youtu.be" not in video_url:
-        print("❌ Invalid YouTube URL.")
+        print(" Invalid YouTube URL.")
         sys.exit()
 
     save_dir = choose_folder()
@@ -56,3 +56,4 @@ if __name__ == "__main__":
         download_video(video_url, save_dir)
     else:
         print("❌ No folder selected.")
+
